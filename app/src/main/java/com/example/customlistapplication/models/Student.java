@@ -3,12 +3,16 @@ package com.example.customlistapplication.models;
 public class Student {
     String name = "";
     String id = "";
-    boolean flag;
+    String phone = "";
+    String address = "";
+    boolean isChecked;
 
-    public Student(String name, String id) {
+    public Student(String name, String id, String phone, String address, boolean isChecked) {
         this.name = name;
         this.id = id;
-        this.flag = false;
+        this.phone = phone;
+        this.address = address;
+        this.isChecked = isChecked;
     }
 
     public String getName() {
@@ -27,11 +31,27 @@ public class Student {
         this.id = id;
     }
 
-    public boolean isFlag() {
-        return flag;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

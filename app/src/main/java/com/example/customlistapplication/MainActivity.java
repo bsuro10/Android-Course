@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 checkBox.setOnClickListener(view -> {
                     int pos = Integer.parseInt(checkBox.getTag().toString());
                     Student student = studentList.get(pos);
-                    student.setFlag(checkBox.isChecked());
+                    student.setChecked(checkBox.isChecked());
                 });
             }
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             name.setText(student.getName());
             id.setText(student.getId());
             checkBox.setTag(position);
-            checkBox.setChecked(student.isFlag());
+            checkBox.setChecked(student.isChecked());
 
             return convertView;
         }

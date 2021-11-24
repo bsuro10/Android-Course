@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class StudentRecListActivity extends AppCompatActivity {
+public class StudentListActivity extends AppCompatActivity {
 
     List<Student> studentList;
 
@@ -60,14 +61,14 @@ public class StudentRecListActivity extends AppCompatActivity {
 
             checkBox.setOnClickListener(view -> {
                 Student student = studentList.get(getAdapterPosition());
-                student.setFlag(checkBox.isChecked());
+                student.setChecked(checkBox.isChecked());
             });
         }
 
         public void bind(Student student) {
             this.name.setText(student.getName());
             this.id.setText(student.getId());
-            this.checkBox.setChecked(student.isFlag());
+            this.checkBox.setChecked(student.isChecked());
         }
     }
 
@@ -100,5 +101,10 @@ public class StudentRecListActivity extends AppCompatActivity {
         public int getItemCount() {
             return studentList.size();
         }
+    }
+
+    public void onCreateStudentClick(View view) {
+        Intent createStudentActivityIntent = new Intent(this, CreateStudentActivity.class);
+        startActivity(createStudentActivityIntent);
     }
 }
