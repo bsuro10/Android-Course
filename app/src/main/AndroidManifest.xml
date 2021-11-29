@@ -10,17 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CustomListApplication">
         <activity
+            android:name=".EditStudentActivity"
+            android:exported="false"
+            android:label="Edit Student" />
+        <activity
+            android:name=".StudentDetailsActivity"
+            android:exported="false"
+            android:label="Students Details" />
+        <activity
             android:name=".CreateStudentActivity"
             android:exported="false"
             android:label="Create Student" />
-        <activity android:name=".StudentListActivity" android:label="Students List">
+        <activity
+            android:name=".StudentListActivity"
+            android:label="Students List">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

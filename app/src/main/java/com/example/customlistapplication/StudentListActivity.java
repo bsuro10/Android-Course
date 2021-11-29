@@ -16,32 +16,50 @@ import android.widget.TextView;
 import com.example.customlistapplication.models.Model;
 import com.example.customlistapplication.models.Student;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity {
 
     List<Student> studentList;
+    RecyclerView list;
+    MyAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_rec_list);
 
-        RecyclerView list = findViewById(R.id.student_rec_list_activity_reclist);
+        list = findViewById(R.id.student_rec_list_activity_reclist);
         list.setHasFixedSize(true);
 
         list.setLayoutManager(new LinearLayoutManager(this));
 
         studentList = Model.instance.getStudentList();
 
-        MyAdapter myAdapter = new MyAdapter();
+        myAdapter = new MyAdapter();
         list.setAdapter(myAdapter);
 
-        myAdapter.setListener(position -> {
-            Log.d("Debug", "Clicked Row: " + position);
+        myAdapter.setItemClickListener(position -> {
+            Intent studentDetailsActivityIntent = new Intent(this, StudentDetailsActivity.class);
+            studentDetailsActivityIntent.putExtra("studentPosition", position);
+            startActivity(studentDetailsActivityIntent);
         });
+
+        myAdapter.setCheckboxClickListener((position, isChecked) -> {
+            Student student = studentList.get(position);
+            student.setChecked(isChecked);
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        studentList = Model.instance.getStudentList();
+        list.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initList() {
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -49,19 +67,18 @@ public class StudentListActivity extends AppCompatActivity {
         TextView id;
         CheckBox checkBox;
 
-        public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, OnItemClickListener itemClickListener, OnCheckboxClickListener checkboxClickListener) {
             super(itemView);
             name = itemView.findViewById(R.id.list_item_textview_name);
             id = itemView.findViewById(R.id.list_item_textview_id);
             checkBox = itemView.findViewById(R.id.list_item_checkbox);
 
             itemView.setOnClickListener(view -> {
-                listener.onItemClick(getAdapterPosition());
+                itemClickListener.onItemClick(getAdapterPosition());
             });
 
             checkBox.setOnClickListener(view -> {
-                Student student = studentList.get(getAdapterPosition());
-                student.setChecked(checkBox.isChecked());
+                checkboxClickListener.onCheckboxClick(getAdapterPosition(), checkBox.isChecked());
             });
         }
 
@@ -76,19 +93,29 @@ public class StudentListActivity extends AppCompatActivity {
         void onItemClick(int position);
     }
 
+    interface OnCheckboxClickListener {
+        void onCheckboxClick(int position, boolean isChecked);
+    }
+
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
-        OnItemClickListener listener;
+        OnCheckboxClickListener checkboxClickListener;
+        OnItemClickListener itemClickListener;
 
-        public void setListener(OnItemClickListener listener) {
-            this.listener = listener;
+
+        public void setItemClickListener(OnItemClickListener itemClickListener) {
+            this.itemClickListener = itemClickListener;
+        }
+
+        public void setCheckboxClickListener(OnCheckboxClickListener checkboxClickListener) {
+            this.checkboxClickListener = checkboxClickListener;
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.list_item, parent, false);
-            return new MyViewHolder(view, listener);
+            return new MyViewHolder(view, itemClickListener, checkboxClickListener);
         }
 
         @Override
